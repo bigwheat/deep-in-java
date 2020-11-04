@@ -106,14 +106,14 @@ java
 //第二阶段开始并发标记(concurrent-mark-start) ，在第一个阶段被暂停的线程重新开始运行，由前阶段标记过的对象出发，所有可到达的对象都在本阶段中标记。
 
 2020-10-29T21:19:19.931+0800: 114.458: [CMS-concurrent-mark: 0.160/0.160 secs] [Times: user=0.32 sys=0.03, real=0.16 secs]
-//并发标记阶段结束，占用 0.160秒CPU时间, 0.160秒墙钟时间(也包含线程让出CPU给其他线程执行的时间)
+//并发标记阶段结束，占用 0.160秒CPU时间 (也包含线程让出CPU给其他线程执行的时间)
 
 2020-10-29T21:19:19.931+0800: 114.459: [CMS-concurrent-preclean-start]
 //第三阶段开始预清理阶段
 //预清理也是一个并发执行的阶段。在本阶段，会查找前一阶段执行过程中,从新生代晋升或新分配或被更新的对象。通过并发地重新扫描这些对象，预清理阶段可以减少下一个stop-the-world 重新标记阶段的工作量。
 
 2020-10-29T21:19:19.998+0800: 114.525: [CMS-concurrent-preclean: 0.065/0.066 secs] [Times: user=0.05 sys=0.01, real=0.06 secs]
-//预清理阶段费时 0.065秒CPU时间，0.066秒墙钟时间
+//预清理阶段费时 0.065秒CPU时间
 
 2020-10-29T21:19:19.998+0800: 114.525: [CMS-concurrent-abortable-preclean-start]CMS: abort preclean due to time
 2020-10-29T21:19:25.072+0800: 119.599: [CMS-concurrent-abortable-preclean: 5.038/5.073 secs] [Times: user=7.72 sys=0.50, real=5.08 secs]
