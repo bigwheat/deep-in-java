@@ -1,0 +1,36 @@
+2020-10-29T21:19:19.488+0800: 114.015: [GC (CMS Initial Mark) [1 CMS-initial-mark: 106000K(2097152K)] 1084619K(3984640K), 0.2824583 secs] [Times: user=0.86 sys=0.00, real=0.28 secs]
+//第一阶段初始标记，开始使用CMS回收器进行老年代回收。初始标记(CMS-initial-mark)阶段,这个阶段标记由根可以直接到达的对象，标记期间整个应用线程会暂停。
+//老年代容量为2097152K,CMS 回收器在空间占用达到 106000K 时被触发
+2020-10-29T21:19:19.771+0800: 114.298: [CMS-concurrent-mark-start]
+//第二阶段开始并发标记(concurrent-mark-start) ，在第一个阶段被暂停的线程重新开始运行，由前阶段标记过的对象出发，所有可到达的对象都在本阶段中标记。
+2020-10-29T21:19:19.931+0800: 114.458: [CMS-concurrent-mark: 0.160/0.160 secs] [Times: user=0.32 sys=0.03, real=0.16 secs]
+//并发标记阶段结束，占用 0.160秒CPU时间, 0.160秒墙钟时间(也包含线程让出CPU给其他线程执行的时间)
+2020-10-29T21:19:19.931+0800: 114.459: [CMS-concurrent-preclean-start]
+//第三阶段开始预清理阶段
+//预清理也是一个并发执行的阶段。在本阶段，会查找前一阶段执行过程中,从新生代晋升或新分配或被更新的对象。通过并发地重新扫描这些对象，预清理阶段可以减少下一个stop-the-world 重新标记阶段的工作量。
+2020-10-29T21:19:19.998+0800: 114.525: [CMS-concurrent-preclean: 0.065/0.066 secs] [Times: user=0.05 sys=0.01, real=0.06 secs]
+//预清理阶段费时 0.065秒CPU时间，0.066秒墙钟时间
+2020-10-29T21:19:19.998+0800: 114.525: [CMS-concurrent-abortable-preclean-start]CMS: abort preclean due to time
+2020-10-29T21:19:25.072+0800: 119.599: [CMS-concurrent-abortable-preclean: 5.038/5.073 secs] [Times: user=7.72 sys=0.50, real=5.08 secs]
+//并发可中止的预清理阶段，不会影响用户线程，该阶段是为了尽量承担 STW（stop-the-world）中最终标记阶段的工作，减少下一个STW重新标记阶段的工作量
+2020-10-29T21:19:25.076+0800: 119.603: [GC (CMS Final Remark) [YG occupancy: 1279357 K (1887488 K)]
+//第四阶段最终标记(CMS Final Remark)，暂停所有用户线程，从GC Root开始重新扫描整堆，标记存活的对象
+//1279357 K (1887488 K) 年轻代当前占用情况和容量
+2020-10-29T21:19:25.076+0800: 119.603: [Rescan (parallel) , 0.3120602 secs]
+//应用停止的阶段完成存活对象的标记工作以及耗时,多线程处理young区和多线程扫描old+perm的卡表的总时间， parallel表示多GC线程并行
+2020-10-29T21:19:25.388+0800: 119.915: [weak refs processing, 0.0015920 secs]
+//第一个子阶段，随着这个阶段的进行处理弱引用以及耗时
+2020-10-29T21:19:25.390+0800: 119.917: [class unloading, 0.0517863 secs]
+//第二个子阶段，类写卸载，清理未使用的类信息以及耗时
+2020-10-29T21:19:25.441+0800: 119.969: [scrub symbol table, 0.0212825 secs]
+//第三个自阶段，清理持有class级别元数据的symbol和string表以及耗时
+2020-10-29T21:19:25.463+0800: 119.990: [scrub string table, 0.0022435 secs][1 CMS-remark: 106000K(2097152K)] 1385358K(3984640K), 0.3959182 secs] [Times: user=1.33 sys=0.00, real=0.40 secs]
+//106000K(2097152K) 老年代内存使用量和总量      1385358K(3984640K)堆内存使用量和总量  以及本阶段耗时0.3959182     本阶段的耗时，由user，sys和real三部分组成。
+2020-10-29T21:19:25.473+0800: 120.000: [CMS-concurrent-sweep-start]
+//第五阶段标记并发清除(CMS-concurrent-sweep-start)
+2020-10-29T21:19:25.540+0800: 120.067: [CMS-concurrent-sweep: 0.067/0.067 secs] [Times: user=0.18 sys=0.02, real=0.06 secs]
+//清除不再使用的对象，回收这些对象占用的空间,这一阶段的耗时
+2020-10-29T21:19:25.540+0800: 120.068: [CMS-concurrent-reset-start]
+//第六阶段并发重置(CMS-concurrent-reset-start),并发执行阶段，重置CMS算法内部使用的数据结构，为下一次垃圾回收作准备
+2020-10-29T21:19:25.544+0800: 120.071: [CMS-concurrent-reset: 0.003/0.003 secs] [Times: user=0.00 sys=0.00, real=0.01 secs]
+//标识并发重置阶段耗时
