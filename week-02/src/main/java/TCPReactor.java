@@ -50,7 +50,7 @@ public class TCPReactor implements Runnable {
             Set<SelectionKey> selectedKeys = selector.selectedKeys();
             Iterator<SelectionKey> it = selectedKeys.iterator();
             while (it.hasNext()) {
-                // 根據事件的key進行調度
+                // 调度
                 dispatch((SelectionKey) (it.next()));
                 it.remove();
             }
